@@ -39,10 +39,17 @@ const CoinData = styled.div({
 })
 
 
-const SidePanel = ({ coin, setCoin, coinData }) => {
-    const { tokenAddress, twitterUrl, discordId } = coinData[coin] || 'Unavailable'
+const NOT_AVAILABLE = 'N/A'
+
+const SidePanel = ({ setCoin, selectedCoinData }) => {
+    const {
+        tokenAddress = NOT_AVAILABLE,
+        twitterUrl = NOT_AVAILABLE,
+        discordId = NOT_AVAILABLE
+    } = selectedCoinData
 
     return (
+
         <SidePanelContainer >
             <h2 style={{ color: '#020d66' }}>Analyze Token</h2>
             <Flex style={{ justifyContent: 'space-between' }}>

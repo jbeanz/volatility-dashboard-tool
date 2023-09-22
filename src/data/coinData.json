@@ -2,11 +2,85 @@
     "Unibot": {
         "tokenAddress": "0xf819d9cb1c2a819fd991781a822de3ca8607c3c9",
         "twitterUrl": "https://twitter.com/TeamUnibot",
-        "discordId": "@fren"
+        "discordId": "@Unibotfren",
+        "classificationData": [
+            {
+                "label": "Technical News",
+                "percentage": 10,
+                "backgroundColor": "#5f9d97"
+            },
+            {
+                "label": "In Person Events",
+                "percentage": 15,
+                "backgroundColor": "#149bb3"
+            },
+            {
+                "label": "Partnerships",
+                "percentage": 20,
+                "backgroundColor": "#0093d2"
+            },
+            {
+                "label": "Initial Hack/Exploit Announcements",
+                "percentage": 25,
+                "backgroundColor": "#5d80e0"
+            },
+            {
+                "label": "Tokenomics",
+                "percentage": 20,
+                "backgroundColor": "#f48e00"
+            },
+            {
+                "label": "Major Upgrades",
+                "percentage": 5,
+                "backgroundColor": "#d8b423"
+            },
+            {
+                "label": "Miscellaneous",
+                "percentage": 5,
+                "backgroundColor": "#e6228e"
+            }
+        ]
     },
     "WorldCoin": {
         "tokenAddress": "0x163f8c2467924be0ae7b5347228cabf260318753",
         "twitterUrl": "https://twitter.com/worldcoin",
-        "discordId": "@fren"
+        "discordId": "@WorldCoinfren",
+        "classificationData": [
+            {
+                "label": "Technical News",
+                "percentage": 2,
+                "backgroundColor": "#5f9d97"
+            },
+            {
+                "label": "In Person Events",
+                "percentage": 8,
+                "backgroundColor": "#149bb3"
+            },
+            {
+                "label": "Partnerships",
+                "percentage": 20,
+                "backgroundColor": "#0093d2"
+            },
+            {
+                "label": "Initial Hack/Exploit Announcements",
+                "percentage": 40,
+                "backgroundColor": "#5d80e0"
+            },
+            {
+                "label": "Tokenomics",
+                "percentage": 20,
+                "backgroundColor": "#f48e00"
+            },
+            {
+                "label": "Major Upgrades",
+                "percentage": 15,
+                "backgroundColor": "#d8b423"
+            },
+            {
+                "label": "Miscellaneous",
+                "percentage": 5,
+                "backgroundColor": "#e6228e"
+            }
+        ]
     }
 }

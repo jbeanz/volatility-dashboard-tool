@@ -26,15 +26,16 @@ function App() {
   const [coin, setCoin] = useState(WORLD_COIN)
   const [currency, setCurrency] = useState(ETH)
 
+  const selectedCoinData = coinData[coin] || {}
+
   return (
     <div className="App">
       <Flex style={{ flexDirection: 'column' }}>
         <h1 style={{ color: '#020d66' }}>Historical News/Social Media Volatility Dashboard</h1>
         <Section>
           <SidePanel
-            coin={coin}
             setCoin={setCoin}
-            coinData={coinData}
+            selectedCoinData={selectedCoinData}
           />
           <Flex style={{ flexDirection: 'column', flexGrow: 1 }}>
             <Parameters
@@ -49,7 +50,7 @@ function App() {
           <Flex>
             <ImpactTable />
             <FrontRunTable />
-            <PieChart />
+            <PieChart selectedCoinData={selectedCoinData} />
           </Flex>
         </Section>
         <Section style={{ flexDirection: 'column', alignItems: 'center' }}>
