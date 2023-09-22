@@ -27,6 +27,7 @@ function App() {
   const [currency, setCurrency] = useState(ETH)
 
   const selectedCoinData = coinData[coin] || {}
+  const selectedCoinDiscordData = discordData[coin] || {}
 
   return (
     <div className="App">
@@ -42,7 +43,7 @@ function App() {
               currency={currency}
               setCurrency={setCurrency}
             />
-            <LineChart discordData={discordData} />
+            <LineChart selectedCoinDiscordData={selectedCoinDiscordData} />
           </Flex>
         </Section>
         <Section style={{ backgroundColor: '#f4e0e0', margin: 0, padding: 12, flexDirection: 'column' }}>

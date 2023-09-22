@@ -41,8 +41,8 @@ const getAnnouncementContentTooltip = (lineChartData) => ({ raw, label }) => {
     return tooltip
 };
 
-const LineChart = ({ discordData }) => {
-    const { messages } = discordData || {};
+const LineChart = ({ selectedCoinDiscordData }) => {
+    const { messages = [] } = selectedCoinDiscordData
 
     const labels = []
     const priceData = []
@@ -55,7 +55,7 @@ const LineChart = ({ discordData }) => {
         acc[label] = content
         labels.push(label)
 
-        priceData.push(idx) // TODO replace with price data
+        priceData.push(Math.random() * idx) // TODO replace with price data
         return acc
     }, {});
 
