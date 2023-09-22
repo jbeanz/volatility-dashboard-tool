@@ -8,20 +8,19 @@ import { WORLD_COIN, UNIBOT } from '../utils';
 const SidePanelContainer = styled.div({
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
     width: '30%',
-    backgroundColor: ' #f2f2f2',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    padding: 48,
-    height: 500
+    backgroundColor: '#ffdbf9',
+    padding: 24,
+    borderRadius: 20,
+    margin: 12,
 })
 
 const Button = styled.button({
     width: 100,
     padding: 12,
     margin: 24,
-    backgroundColor: '#9dd866',
+    backgroundColor: '#ff9066',
     border: 'none',
     borderRadius: 3,
     cursor: 'pointer',
@@ -45,7 +44,7 @@ const SidePanel = ({ coin, setCoin, coinData }) => {
 
     return (
         <SidePanelContainer >
-            <h2>Analyze Token</h2>
+            <h2 style={{ color: '#020d66' }}>Analyze Token</h2>
             <Flex style={{ justifyContent: 'space-between' }}>
                 <Button onClick={() => setCoin(WORLD_COIN)}>{WORLD_COIN}</Button>
                 <Button onClick={() => setCoin(UNIBOT)}>{UNIBOT}</Button>

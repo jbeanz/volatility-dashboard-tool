@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import styled from 'styled-components';
 
 import { extractDate } from './utils';
 
@@ -22,6 +23,13 @@ ChartJS.register(
     Tooltip,
     Legend
 );
+
+const LineChartContainer = styled.div({
+    backgroundColor: '#f2f2f2',
+    padding: 24,
+    borderRadius: '10px 10px 20px 20px',
+    margin: 12,
+})
 
 const getAnnouncementContentTooltip = (lineChartData) => ({ raw, label }) => {
     const price = raw
@@ -62,15 +70,7 @@ const LineChart = ({ discordData }) => {
     }
 
     return (
-        <div
-            style={{
-                height: 400,
-                display: 'flex',
-                padding: '20px',
-                backgroundColor: '#f2f2f2',
-                boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-            }}
-        >
+        <LineChartContainer>
             <Line
                 data={{
                     labels: labels,
@@ -84,7 +84,7 @@ const LineChart = ({ discordData }) => {
                 }}
                 options={chartOptions}
             />
-        </div>
+        </LineChartContainer>
     );
 };
 
