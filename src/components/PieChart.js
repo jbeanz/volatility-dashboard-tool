@@ -34,7 +34,7 @@ const PieChart = ({ selectedCoinData }) => {
     };
 
     return (
-        <Card style={{ backgroundColor: 'white', maxHeight: 500, flexGrow: 1, justifyContent: 'center' }}>
+        <Card style={{ backgroundColor: 'white', maxHeight: 400, flexGrow: 1, justifyContent: 'center' }}>
             <Pie data={chartData} />
         </Card >
     );

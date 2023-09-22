@@ -37,7 +37,7 @@ function App() {
             setCoin={setCoin}
             selectedCoinData={selectedCoinData}
           />
-          <Flex style={{ flexDirection: 'column', flexGrow: 1 }}>
+          <Flex style={{ flexDirection: 'column', }}>
             <Parameters
               currency={currency}
               setCurrency={setCurrency}
@@ -53,10 +53,6 @@ function App() {
             <PieChart selectedCoinData={selectedCoinData} />
           </Flex>
         </Section>
-        <Section style={{ flexDirection: 'column', alignItems: 'center' }}>
-
-        </Section>
-
       </Flex >
     </div >
   );

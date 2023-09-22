@@ -29,7 +29,8 @@ const LineChartContainer = styled.div({
     padding: 24,
     borderRadius: '10px 10px 20px 20px',
     margin: 12,
-    height: 500
+    height: 200,
+    flexGrow: 1
 })
 
 const getAnnouncementContentTooltip = (lineChartData) => ({ raw, label }) => {
