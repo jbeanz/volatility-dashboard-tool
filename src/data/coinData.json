@@ -1,0 +1,12 @@
+{
+    "TeamUnibot": {
+        "tokenAddress": "0xf819d9cb1c2a819fd991781a822de3ca8607c3c9",
+        "twitterUrl": "https://twitter.com/TeamUnibot",
+        "discordId": "@fren"
+    },
+    "WorldCoin": {
+        "tokenAddress": "0x163f8c2467924be0ae7b5347228cabf260318753",
+        "twitterUrl": "https://twitter.com/worldcoin",
+        "discordId": "@fren"
+    }
+}
