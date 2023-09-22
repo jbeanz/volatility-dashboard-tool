@@ -2,6 +2,8 @@ import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
+import Card from './Card';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const pieDataConfig = [
@@ -43,9 +45,9 @@ const chartData = {
 
 const PieChart = () => {
     return (
-        <div style={{ height: 500 }}>
+        <Card style={{ backgroundColor: 'white', maxHeight: 500, flexGrow: 1, justifyContent: 'center' }}>
             <Pie data={chartData} />
-        </div >
+        </Card >
     );
 }
 

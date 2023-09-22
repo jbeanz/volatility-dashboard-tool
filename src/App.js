@@ -44,15 +44,16 @@ function App() {
             <LineChart discordData={discordData} />
           </Flex>
         </Section>
-        <Section>
-          <div style={{ display: 'flex' }}>
+        <Section style={{ backgroundColor: '#f4e0e0', margin: 0, padding: 12, flexDirection: 'column' }}>
+          <h2 style={{ color: '#020d66' }}>Social Media Tags and Classification</h2>
+          <Flex>
             <ImpactTable />
-          </div>
-          <FrontRunTable />
+            <FrontRunTable />
+            <PieChart />
+          </Flex>
         </Section>
         <Section style={{ flexDirection: 'column', alignItems: 'center' }}>
-          <h2 style={{ color: '#020d66' }}>Social Media Tags and Classification</h2>
-          <PieChart />
+
         </Section>
 
       </Flex >
