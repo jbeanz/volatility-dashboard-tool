@@ -14,7 +14,7 @@ import './App.css';
 
 import discordData from './data/discord.json';
 import coinData from './data/coinData.json'
-import { twitterData } from './data/twitter.js'
+import twitterData from './data/twitter.json'
 import worldcoin_prices from './data/worldcoin_prices.json'
 import pieChartData from './data/pie_chart.json'
 import topImpactfulData from './data/top_impactful.json'
