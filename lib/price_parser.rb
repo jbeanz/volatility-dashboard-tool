@@ -112,8 +112,7 @@ class PriceParser
 	end
 
 	def self.gpt_prompts
-		discord = JSON.parse(File.read("../data/discord/wc_cleaned.json"))
-		messages = discord["messages"]
+		messages = JSON.parse(File.read("../data/discord/tweets.json"))
 		first_price_timestamp = 1690197167
 
 		prompts = []
@@ -128,14 +127,12 @@ Classify the following text from Worldcoin's twitter account with one or more of
 
 
 		messages.each do |m|
-			timestamp = DateTime.parse(m["timestamp"]).strftime('%s').to_i
+			timestamp = DateTime.parse(m["date"]).strftime('%s').to_i
 			if timestamp < first_price_timestamp
 				next
 			end
-			prompt = prefix + "\n" + m["content"]
-			if m["embeds"] && m["embeds"] != []
-				prompt += "\n#{m["embeds"][0]["description"]}"
-			end
+			prompt = prefix + "\n" + m["rawContent"]
+
 			prompts << prompt
 			ids << m["id"]
 		end
@@ -148,4 +145,4 @@ Classify the following text from Worldcoin's twitter account with one or more of
 
 end
 
-PriceParser.get_impacts
+PriceParser.gpt_prompts
