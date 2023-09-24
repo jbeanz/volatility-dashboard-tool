@@ -246,8 +246,6 @@ const LineChart = ({ currency, coin, worldCoinPrice, selectedCoinDiscordData, tw
             }
         })
 
-        // const processedDiscordData = getProcessedDiscordData(selectedCoinDiscordData)
-        // const filteredData = _.sortBy([...processedTwitterData, ...processedDiscordData], 'timestamp')
         const filteredData = _.sortBy(processedTwitterData, 'timestamp').filter(({ year, month }) => {
             return year === 2023 && month >= 7
         })
@@ -271,25 +269,25 @@ const LineChart = ({ currency, coin, worldCoinPrice, selectedCoinDiscordData, tw
         const priceData = [];
 
         filteredData.forEach(({ year, month, day, hour, minute, timestamp, content, second, tooltipDate }) => {
-            if (year === 2023 && month >= 7) {
-                const matchingPrice = findMatchingPrice({ data: worldCoinPriceData, year, month, day, hour, minute, second })
-                if (matchingPrice) {
-                    const { price_usd, price_eth } = matchingPrice;
-                    priceData.push({
-                        priceUsd: price_usd,
-                        priceEth: price_eth,
-                        year,
-                        month,
-                        day,
-                        hour,
-                        minute,
-                        timestamp,
-                        content,
-                        tooltipDate
-                    });
-                }
+            const matchingPrice = findMatchingPrice({ data: worldCoinPriceData, year, month, day, hour, minute, second })
+            if (matchingPrice) {
+                const { price_usd, price_eth } = matchingPrice;
+                priceData.push({
+                    priceUsd: price_usd,
+                    priceEth: price_eth,
+                    year,
+                    month,
+                    day,
+                    hour,
+                    minute,
+                    timestamp,
+                    content,
+                    tooltipDate
+                });
             }
         });
+
+        debugger
 
         setCoinPriceData(priceData)
 
@@ -301,7 +299,7 @@ const LineChart = ({ currency, coin, worldCoinPrice, selectedCoinDiscordData, tw
     const priceDataUsd = coinPriceData.map(({ priceUsd }) => priceUsd);
     const priceDataEth = coinPriceData.map(({ priceEth }) => priceEth);
     const priceDataInCurrency = currency === 'USD' ? priceDataUsd : priceDataEth;
-
+    debugger
     const header = _.isEmpty(selectedCoinDiscordData) ? <h2> NO DISCORD DATA FOR SELECTED COIN</h2> : <h2>{`${coin} Price in ${currency} Over Time`}</h2>
 
     const chartOptions = getChartOptions(coinPriceData)
