@@ -1,0 +1,10 @@
+Curl Command for uniswap subgraph swap data:
+
+curl 'https://api.thegraph.com/subgraphs/name/messari/uniswap-v3-ethereum' \
+  -H 'authority: api.thegraph.com' \
+  -H 'accept: application/json, multipart/mixed' \
+  -H 'content-type: application/json' \
+  --data-raw '{"query":"{\n  liquidityPool(id: \"0x8dbee21e8586ee356130074aaa789c33159921ca\") {\n    swaps(\n      where: {timestamp_lt: 1695511111}\n      orderBy: timestamp\n      orderDirection: desc\n      first: 1000\n    ) {\n      hash\n      timestamp\n      tokenIn {\n        id\n      }\n      amountIn\n      amountInUSD\n      tokenOut {\n        id\n      }\n      amountOut\n      amountOutUSD\n      account {\n        id\n      }\n    }\n  }\n}","variables":null,"extensions":{"headers":null}}' \
+  --compressed > 0.json
+
+
