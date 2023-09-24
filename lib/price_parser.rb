@@ -101,14 +101,12 @@ class PriceParser
 				end
 
 				if !impact_found
-					impact << nil
+					impacts << nil
 				end
 
 			end
 			messages[i]["impacts"] = impacts
 		end
-
-		discord["messages"] = messages
 
 		File.write("twitter.json", messages.to_json)
 	end
@@ -150,4 +148,4 @@ Classify the following text from Worldcoin's twitter account with one or more of
 
 end
 
-PriceParser.gpt_prompts
+PriceParser.get_impacts
