@@ -19,14 +19,6 @@ const Button = styled.button({
     backgroundColor: isSelected ? '#cecdcd' : '#f2f2f2'
 }))
 
-const Input = styled.input({
-    borderRadius: 5,
-    cursor: 'pointer',
-    height: 36,
-    margin: 12,
-    fontWeight: 700
-},)
-
 const Parameters = ({
     currency,
     setCurrency }) => {
@@ -42,10 +34,6 @@ const Parameters = ({
             <h4>Priced in:</h4>
             <Button isSelected={isEthSelected} onClick={() => setCurrency(ETH)}>{ETH}</Button>
             <Button isSelected={isBtcSelected} onClick={() => setCurrency(USD)}>{USD}</Button>
-        </Flex>
-        <Flex style={{ justifyContent: 'center' }}>
-            <h4>Choose Time Frame (Days)</h4>
-            <Input type="number" id="input1" placeholder="180 days.." />
         </Flex>
     </Card >
 }

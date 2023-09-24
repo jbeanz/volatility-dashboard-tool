@@ -30,15 +30,20 @@ const LineChartContainer = styled.div({
     padding: 24,
     borderRadius: '10px 10px 20px 20px',
     margin: 12,
-    height: 200,
+    height: 300,
     flexGrow: 1
 })
 
-const getAnnouncementContentTooltip = (data) => ({ raw, label }) => {
+const getTooltipContent = (data) => ({ raw, label }) => {
     const price = raw
     const content = data.find(({ timestamp }) => timestamp === label)?.content
     const tooltip = `Price: ${price} - ${content}`
     return tooltip
+};
+
+const getTooltipTitle = (data) => (x) => {
+    const tooltipDate = data.find(({ timestamp }) => timestamp === x[0].label)?.tooltipDate
+    return tooltipDate
 };
 
 function extractDateFromTwitterTimestamp(datetimeStr) {
@@ -52,33 +57,34 @@ function extractDateFromTwitterTimestamp(datetimeStr) {
     const hour = dateTime.getHours()
     const minute = dateTime.getMinutes()
     const second = dateTime.getSeconds()
+    const tooltipDate = dateTime.toLocaleString()
 
-    return { year, month, day, hour, minute, second };
+    return { year, month, day, hour, minute, second, tooltipDate };
 }
 
-const getProcessedDiscordData = (selectedCoinDiscordData) => {
-    const { messages = [] } = selectedCoinDiscordData;
+// const getProcessedDiscordData = (selectedCoinDiscordData) => {
+//     const { messages = [] } = selectedCoinDiscordData;
 
-    const processedDiscordData = [];
+//     const processedDiscordData = [];
 
-    messages.forEach(({ timestamp, content }) => {
-        const { year, month, day, hour, minute, second } = extractDate(timestamp);
+//     messages.forEach(({ timestamp, content }) => {
+//         const { year, month, day, hour, minute, second } = extractDate(timestamp);
 
-        const formattedTimestamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`;
-        processedDiscordData.push({
-            timestamp: formattedTimestamp,
-            content,
-            year,
-            month,
-            day,
-            hour,
-            minute,
-            second
-        });
-    });
+//         const formattedTimestamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`;
+//         processedDiscordData.push({
+//             timestamp: formattedTimestamp,
+//             content,
+//             year,
+//             month,
+//             day,
+//             hour,
+//             minute,
+//             second
+//         });
+//     });
 
-    return processedDiscordData;
-};
+//     return processedDiscordData;
+// };
 
 const findMatchingPrice = ({ data, year, month, day, hour, minute, second }) => {
     const matchingPrice = data.find(
@@ -131,7 +137,88 @@ const findMatchingPrice = ({ data, year, month, day, hour, minute, second }) => 
     return matchingPrice;
 };
 
-const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterData }) => {
+const getChartOptions = (coinPriceData) => {
+    const chartOptions = {
+        plugins: {
+            tooltip: {
+                enabled: false,
+                callbacks: {
+                    title: getTooltipTitle(coinPriceData),
+                    label: getTooltipContent(coinPriceData)
+                },
+                external: function (context) {
+                    // Tooltip Element
+                    let tooltipEl = document.getElementById('chartjs-tooltip');
+
+                    // Create element on first render
+                    if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.innerHTML = '<table></table>';
+                        document.body.appendChild(tooltipEl);
+                    }
+
+                    // Hide if no tooltip
+                    const tooltipModel = context.tooltip;
+                    if (tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = 0;
+                        return;
+                    }
+
+                    // Set caret Position
+                    tooltipEl.classList.remove('above', 'below', 'no-transform');
+                    if (tooltipModel.yAlign) {
+                        tooltipEl.classList.add(tooltipModel.yAlign);
+                    } else {
+                        tooltipEl.classList.add('no-transform');
+                    }
+
+                    function getBody(bodyItem) {
+                        return bodyItem.lines;
+                    }
+
+                    // Set Text
+                    if (tooltipModel.body) {
+                        const titleLines = tooltipModel.title || [];
+                        const bodyLines = tooltipModel.body.map(getBody);
+
+                        let innerHtml = '<thead>';
+
+                        titleLines.forEach(function (title) {
+                            innerHtml += '<tr><th>' + title + '</th></tr>';
+                        });
+                        innerHtml += '</thead><tbody>';
+
+                        bodyLines.forEach(function (body, i) {
+                            let style = 'background:#ffffff';
+                            style += '; border-color:#ffffff';
+                            style += '; border-width: 2px';
+                            const span = '<span style="' + style + '">' + body + '</span>';
+                            innerHtml += '<tr><td>' + span + '</td></tr>';
+                        });
+                        innerHtml += '</tbody>';
+
+                        let tableRoot = tooltipEl.querySelector('table');
+                        tableRoot.innerHTML = innerHtml;
+                    }
+
+                    const position = context.chart.canvas.getBoundingClientRect();
+
+                    // Display, position, and set styles for font
+                    tooltipEl.style.opacity = 1;
+                    tooltipEl.style.position = 'absolute';
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                    tooltipEl.style.padding = tooltipModel.padding + 'px ' + tooltipModel.padding + 'px';
+                    tooltipEl.style.pointerEvents = 'none';
+                }
+            }
+        },
+    }
+    return chartOptions
+}
+
+const LineChart = ({ currency, coin, worldCoinPrice, selectedCoinDiscordData, twitterData }) => {
     const [coinPriceData, setCoinPriceData] = useState([])
     const [labels, setLabels] = useState([])
 
@@ -140,7 +227,7 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
         const processedTwitterData = []
 
         twitterData.forEach(({ date, rawContent }) => {
-            const { year, month, day, hour, minute, second } = extractDateFromTwitterTimestamp(date);
+            const { year, month, day, hour, minute, second, tooltipDate } = extractDateFromTwitterTimestamp(date);
             const timestamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`
 
             if (!twitterDataTimestamps.has(timestamp)) {
@@ -153,6 +240,7 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
                     minute,
                     second,
                     content: rawContent,
+                    tooltipDate
                 })
                 twitterDataTimestamps.add(timestamp)
             }
@@ -182,7 +270,7 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
 
         const priceData = [];
 
-        filteredData.forEach(({ year, month, day, hour, minute, timestamp, content, second }) => {
+        filteredData.forEach(({ year, month, day, hour, minute, timestamp, content, second, tooltipDate }) => {
             if (year === 2023 && month >= 7) {
                 const matchingPrice = findMatchingPrice({ data: worldCoinPriceData, year, month, day, hour, minute, second })
                 if (matchingPrice) {
@@ -196,7 +284,8 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
                         hour,
                         minute,
                         timestamp,
-                        content
+                        content,
+                        tooltipDate
                     });
                 }
             }
@@ -213,38 +302,27 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
     const priceDataEth = coinPriceData.map(({ priceEth }) => priceEth);
     const priceDataInCurrency = currency === 'USD' ? priceDataUsd : priceDataEth;
 
-    const header = _.isEmpty(selectedCoinDiscordData) ? <div> NO DISCORD DATA FOR SELECTED COIN</div> : null
+    const header = _.isEmpty(selectedCoinDiscordData) ? <h2> NO DISCORD DATA FOR SELECTED COIN</h2> : <h2>{`${coin} Price in ${currency} Over Time`}</h2>
 
-    const chartOptions = {
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    title: (x) => { return x.raw },
-                    label: getAnnouncementContentTooltip(coinPriceData),
-                }
-            }
-        },
-    }
-
+    const chartOptions = getChartOptions(coinPriceData)
     return (
-        <> {header}
-            <LineChartContainer>
-                <Line
-                    data={{
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Twitter/Price Volatility Graph',
-                                data: priceDataInCurrency,
-                                backgroundColor: 'blue',
-                            },
-                        ],
-                    }}
-                    options={chartOptions}
-                />
+        <LineChartContainer>
+            {header}
+            <Line
+                data={{
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Twitter Announcements',
+                            data: priceDataInCurrency,
+                            backgroundColor: '#1d96e8',
+                        },
+                    ],
 
-            </LineChartContainer>
-        </>
+                }}
+                options={chartOptions}
+            />
+        </LineChartContainer>
     );
 };
 
