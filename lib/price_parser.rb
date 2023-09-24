@@ -111,6 +111,40 @@ class PriceParser
 		File.write("twitter.json", messages.to_json)
 	end
 
+	def self.fix_data
+		prices = JSON.parse(File.read("../src/data/worldcoin_prices.json"))
+		last_eth_price = 0
+		last_usd_price = 0
+		prices.each_with_index do |price,i|
+			eth_price = price["price_eth"]
+			if price["price_usd"] == 0.0
+				prices[i]["price_usd"] = eth_price / last_eth_price * last_usd_price
+			end
+
+			last_eth_price = eth_price
+			last_usd_price = price["price_usd"]
+		end
+		File.write("new_prices.json", prices.to_json)
+	end
+
+	def self.add_tags
+		tags = JSON.parse("../data/twitter/tags.json")
+		tweets = JSON.parse("data/twitter/twitter.json")
+
+		tags.each do |tag|
+			id = tag[0]
+			twitter.each_with_index do |tw, i|
+				if tw["id"] = id
+					twitter[i]["tags"] = tag[1].strip.split(",")
+				end
+			end
+		end
+
+		binding.pry
+
+		tags
+	end
+
 	def self.gpt_prompts
 		messages = JSON.parse(File.read("../data/discord/tweets.json"))
 		first_price_timestamp = 1690197167
@@ -146,4 +180,4 @@ Classify the following text from Worldcoin's twitter account with one or more of
 
 end
 
-PriceParser.gpt_prompts
+PriceParser.fix_data
