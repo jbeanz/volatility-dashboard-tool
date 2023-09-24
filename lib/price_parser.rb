@@ -132,6 +132,7 @@ class PriceParser
 		end.reverse[0..9].map do |t|
 			entry = {}
 			entry["content"] = t["rawContent"]
+			entry["id"] = t["id"]
 			entry["date"] = t["date"]
 			entry["eth_delta"] = t["impacts"][0]["eth"]
 			entry["usd_delta"] = t["impacts"][0]["usd"]
@@ -147,6 +148,7 @@ class PriceParser
 		end.reverse[0..9].map do |t|
 			entry = {}
 			entry["content"] = t["rawContent"]
+			entry["id"] = t["id"]
 			entry["date"] = t["date"]
 			entry["eth_delta"] = t["impacts"][1]["eth"]
 			entry["usd_delta"] = t["impacts"][1]["usd"]
@@ -162,6 +164,7 @@ class PriceParser
 		end.reverse[0..9].map do |t|
 			entry = {}
 			entry["content"] = t["rawContent"]
+			entry["id"] = t["id"]
 			entry["date"] = t["date"]
 			entry["eth_delta"] = t["impacts"][2]["eth"]
 			entry["usd_delta"] = t["impacts"][2]["usd"]
@@ -178,6 +181,7 @@ class PriceParser
 			entry = {}
 			entry["content"] = t["rawContent"]
 			entry["date"] = t["date"]
+			entry["id"] = t["id"]
 			begin
 				entry["eth_delta"] = t["impacts"][4]["eth"]
 			rescue
