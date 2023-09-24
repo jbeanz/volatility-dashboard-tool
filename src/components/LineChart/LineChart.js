@@ -41,7 +41,7 @@ const getAnnouncementContentTooltip = (data) => ({ raw, label }) => {
     return tooltip
 };
 
-function extractYearMonthDay(datetimeStr) {
+function extractDateFromTwitterTimestamp(datetimeStr) {
     // Parse the datetime string into a Date object
     const dateTime = new Date(datetimeStr);
 
@@ -51,7 +51,9 @@ function extractYearMonthDay(datetimeStr) {
     const day = dateTime.getDate();
     const hour = dateTime.getHours()
     const minute = dateTime.getMinutes()
-    return { year, month, day, hour, minute };
+    const second = dateTime.getSeconds()
+
+    return { year, month, day, hour, minute, second };
 }
 
 const getProcessedDiscordData = (selectedCoinDiscordData) => {
@@ -60,9 +62,9 @@ const getProcessedDiscordData = (selectedCoinDiscordData) => {
     const processedDiscordData = [];
 
     messages.forEach(({ timestamp, content }) => {
-        const { year, month, day, hour, minute } = extractDate(timestamp);
+        const { year, month, day, hour, minute, second } = extractDate(timestamp);
 
-        const formattedTimestamp = `${year}-${month}-${day}-${hour}-${minute}`;
+        const formattedTimestamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`;
         processedDiscordData.push({
             timestamp: formattedTimestamp,
             content,
@@ -71,13 +73,14 @@ const getProcessedDiscordData = (selectedCoinDiscordData) => {
             day,
             hour,
             minute,
+            second
         });
     });
 
     return processedDiscordData;
 };
 
-const findMatchingPrice = ({ data, year, month, day, hour, minute }) => {
+const findMatchingPrice = ({ data, year, month, day, hour, minute, second }) => {
     const matchingPrice = data.find(
         ({
             priceYear,
@@ -85,6 +88,7 @@ const findMatchingPrice = ({ data, year, month, day, hour, minute }) => {
             priceDay,
             priceHour,
             priceMinute,
+            priceSecond
         }) => {
             const yearMatch = year === priceYear; //worldcoin data will begin from 2023
             const monthMatch = month === priceMonth;
@@ -94,7 +98,19 @@ const findMatchingPrice = ({ data, year, month, day, hour, minute }) => {
             if (yearMatch && monthMatch && dayMatch && hourMatch) {
                 const hasMinuteMatch = priceMinute === minute;
                 if (hasMinuteMatch) {
-                    return true;
+                    const hasSecondMatch = priceSecond === second
+                    if (hasSecondMatch)
+                        return true
+                    const previousSecond = second === 0 ? 59 : second - 1;
+                    return findMatchingPrice({
+                        data,
+                        year,
+                        month,
+                        day,
+                        hour,
+                        minute,
+                        second: previousSecond
+                    })
                 } else {
                     const previousMinute = minute === 0 ? 59 : minute - 1;
                     return findMatchingPrice({
@@ -104,6 +120,7 @@ const findMatchingPrice = ({ data, year, month, day, hour, minute }) => {
                         day,
                         hour,
                         minute: previousMinute,
+                        second,
                     });
                 }
             }
@@ -119,35 +136,44 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
     const [labels, setLabels] = useState([])
 
     useEffect(() => {
-        const processedTwitterData = twitterData.map(({ date, rawContent }) => {
-            const { year, month, day, hour, minute } = extractYearMonthDay(date);
-            const timestamp = `${year}-${month}-${day}-${hour}-${minute}`
-            return {
-                timestamp,
-                year,
-                month,
-                day,
-                hour,
-                minute,
-                content: rawContent,
+        const twitterDataTimestamps = new Set()
+        const processedTwitterData = []
+
+        twitterData.forEach(({ date, rawContent }) => {
+            const { year, month, day, hour, minute, second } = extractDateFromTwitterTimestamp(date);
+            const timestamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`
+
+            if (!twitterDataTimestamps.has(timestamp)) {
+                processedTwitterData.push({
+                    timestamp,
+                    year,
+                    month,
+                    day,
+                    hour,
+                    minute,
+                    second,
+                    content: rawContent,
+                })
+                twitterDataTimestamps.add(timestamp)
             }
         })
 
         // const processedDiscordData = getProcessedDiscordData(selectedCoinDiscordData)
-        // const combinedData = _.sortBy([...processedTwitterData, ...processedDiscordData], 'timestamp')
-        const combinedData = _.sortBy(processedTwitterData, 'timestamp').filter(({ year, month }) => {
+        // const filteredData = _.sortBy([...processedTwitterData, ...processedDiscordData], 'timestamp')
+        const filteredData = _.sortBy(processedTwitterData, 'timestamp').filter(({ year, month }) => {
             return year === 2023 && month >= 7
         })
 
         const worldCoinPriceData = []
         worldCoinPrice.forEach(({ timestamp, price_usd, price_eth }) => {
-            const { priceYear, priceMonth, priceDay, priceHour, priceMinute } = convertUnixTimestamp(timestamp);
+            const { priceYear, priceMonth, priceDay, priceHour, priceMinute, priceSecond } = convertUnixTimestamp(timestamp);
             worldCoinPriceData.push({
                 priceYear,
                 priceMonth,
                 priceDay,
                 priceHour,
                 priceMinute,
+                priceSecond,
                 price_usd,
                 price_eth,
             })
@@ -156,9 +182,9 @@ const LineChart = ({ currency, worldCoinPrice, selectedCoinDiscordData, twitterD
 
         const priceData = [];
 
-        combinedData.forEach(({ year, month, day, hour, minute, timestamp, content }) => {
+        filteredData.forEach(({ year, month, day, hour, minute, timestamp, content, second }) => {
             if (year === 2023 && month >= 7) {
-                const matchingPrice = findMatchingPrice({ data: worldCoinPriceData, year, month, day, hour, minute })
+                const matchingPrice = findMatchingPrice({ data: worldCoinPriceData, year, month, day, hour, minute, second })
                 if (matchingPrice) {
                     const { price_usd, price_eth } = matchingPrice;
                     priceData.push({

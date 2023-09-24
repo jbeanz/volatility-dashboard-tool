@@ -10,8 +10,9 @@ export const extractDate = dateString => {
         const day = dateObj.getDate();
         const hour = dateObj.getHours()
         const minute = dateObj.getMinutes()
+        const second = dateObj.getSeconds()
 
-        return { year, month, day, hour, minute };
+        return { year, month, day, hour, minute, second };
     } catch (error) {
         // Handle any parsing errors
         console.error("Error parsing date:", error);
@@ -29,6 +30,7 @@ export function convertUnixTimestamp(unixTimestamp) {
     const priceDay = date.getDate();
     const priceHour = date.getHours();
     const priceMinute = date.getMinutes();
+    const priceSecond = date.getSeconds();
 
     return {
         priceYear,
@@ -36,6 +38,7 @@ export function convertUnixTimestamp(unixTimestamp) {
         priceDay,
         priceHour,
         priceMinute,
+        priceSecond
     };
 }
 
