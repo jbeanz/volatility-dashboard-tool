@@ -183,12 +183,12 @@ class PriceParser
 			entry["date"] = t["date"]
 			entry["id"] = t["id"]
 			begin
-				entry["eth_delta"] = t["impacts"][4]["eth"]
+				entry["eth_delta"] = t["impacts"][3]["eth"]
 			rescue
 				entry["eth_delta"] = 0
 			end
 			begin
-				entry["usd_delta"] = t["impacts"][4]["eth"]
+				entry["usd_delta"] = t["impacts"][3]["eth"]
 			rescue
 				entry["usd_delta"] = 0
 			end
