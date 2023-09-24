@@ -20,7 +20,7 @@ import worldcoin_prices from './data/worldcoin_prices.json'
 
 const Section = styled.section({
   display: 'flex',
-  height: 600,
+  height: 700,
   margin: 12,
 })
 
@@ -40,12 +40,12 @@ function App() {
             setCoin={setCoin}
             selectedCoinData={selectedCoinData}
           />
-          <Flex style={{ flexDirection: 'column', }}>
+          <Flex style={{ flexDirection: 'column', flexGrow: 1 }}>
             <Parameters
               currency={currency}
               setCurrency={setCurrency}
             />
-            <LineChart currency={currency} worldCoinPrice={worldcoin_prices} selectedCoinDiscordData={selectedCoinDiscordData} twitterData={twitterData} />
+            <LineChart currency={currency} coin={coin} worldCoinPrice={worldcoin_prices} selectedCoinDiscordData={selectedCoinDiscordData} twitterData={twitterData} />
           </Flex>
         </Section>
         <Section style={{ backgroundColor: '#f4e0e0', margin: 0, padding: 12, flexDirection: 'column' }}>

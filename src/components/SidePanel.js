@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Flex from './Flex';
 
-import { WORLD_COIN, UNIBOT } from '../utils';
+import { WORLD_COIN } from '../utils';
 
 const SidePanelContainer = styled.div({
     display: 'flex',
@@ -38,23 +38,19 @@ const CoinData = styled.div({
     width: 200,
 })
 
-
 const NOT_AVAILABLE = 'N/A'
 
 const SidePanel = ({ setCoin, selectedCoinData }) => {
     const {
         tokenAddress = NOT_AVAILABLE,
         twitterUrl = NOT_AVAILABLE,
-        discordId = NOT_AVAILABLE
     } = selectedCoinData
 
     return (
-
         <SidePanelContainer >
             <h2 style={{ color: '#020d66' }}>Analyze Token</h2>
             <Flex style={{ justifyContent: 'space-between' }}>
                 <Button onClick={() => setCoin(WORLD_COIN)}>{WORLD_COIN}</Button>
-                {/* <Button onClick={() => setCoin(UNIBOT)}>{UNIBOT}</Button> */}
             </Flex>
             <Flex style={{ alignItems: 'flex-start', width: '100%', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Flex>
@@ -64,10 +60,6 @@ const SidePanel = ({ setCoin, selectedCoinData }) => {
                 <Flex>
                     <Label>Twitter Url:</Label>
                     <CoinData>{twitterUrl}</CoinData>
-                </Flex>
-                <Flex>
-                    <Label>Discord Id:</Label>
-                    <CoinData>{discordId}</CoinData>
                 </Flex>
             </Flex >
         </SidePanelContainer >

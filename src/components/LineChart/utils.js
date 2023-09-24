@@ -11,8 +11,8 @@ export const extractDate = dateString => {
         const hour = dateObj.getHours()
         const minute = dateObj.getMinutes()
         const second = dateObj.getSeconds()
-
-        return { year, month, day, hour, minute, second };
+        const tooltipDate = dateObj.toLocaleString()
+        return { year, month, day, hour, minute, second, tooltipDate };
     } catch (error) {
         // Handle any parsing errors
         console.error("Error parsing date:", error);
