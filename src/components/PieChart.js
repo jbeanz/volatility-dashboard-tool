@@ -7,18 +7,32 @@ import Card from './Card';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = ({ selectedCoinData }) => {
+const PieChart = ({ pieChartData }) => {
 
-    const { classificationData = {} } = selectedCoinData
 
     const labels = []
     const data = []
-    const backgroundColors = []
+    const backgroundColors = [
+        "#5f9d97",
+        "#149bb3",
+        "#0093d2",
+        "#5d80e0",
+        "#f48e00",
+        "#d8b423",
+        "#e6228e",
+        "#5f9d97",
+        "#149bb3",
+        "#0093d2",
+        "#5d80e0",
+        "#f48e00",
+        "#d8b423",
+        "#e6228e",
+    ]
 
-    classificationData.forEach(({ label, percentage, backgroundColor }) => {
-        labels.push(label)
-        data.push(percentage)
-        backgroundColors.push(transparentize(0.7, backgroundColor))
+    Object.entries(pieChartData).forEach(([key, value], idx) => {
+        labels.push(key)
+        data.push(value)
+        backgroundColors.push(transparentize(0.7, backgroundColors[idx]))
     })
 
     const chartData = {

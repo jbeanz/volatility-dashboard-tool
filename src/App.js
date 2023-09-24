@@ -3,8 +3,7 @@ import styled from 'styled-components';
 
 import SidePanel from './components/SidePanel';
 import LineChart from './components/LineChart/LineChart';
-import ImpactTable from './components/ImpactTable';
-import FrontRunTable from './components/FrontRunTable';
+import ImpactTable from './components/ImpactTable/ImpactTable';
 import PieChart from './components/PieChart';
 import Flex from './components/Flex';
 import Parameters from './components/Parameters';
@@ -17,6 +16,8 @@ import discordData from './data/discord.json';
 import coinData from './data/coinData.json'
 import { twitterData } from './data/twitter.js'
 import worldcoin_prices from './data/worldcoin_prices.json'
+import pieChartData from './data/pie_chart.json'
+import topImpactfulData from './data/top_impactful.json'
 
 const Section = styled.section({
   display: 'flex',
@@ -48,13 +49,14 @@ function App() {
             <LineChart currency={currency} coin={coin} worldCoinPrice={worldcoin_prices} selectedCoinDiscordData={selectedCoinDiscordData} twitterData={twitterData} />
           </Flex>
         </Section>
-        <Section style={{ backgroundColor: '#f4e0e0', margin: 0, padding: 12, flexDirection: 'column' }}>
-          <h2 style={{ color: '#020d66' }}>Social Media Tags and Classification</h2>
-          <Flex>
-            <ImpactTable />
-            <FrontRunTable />
-            <PieChart selectedCoinData={selectedCoinData} />
-          </Flex>
+        <Section style={{
+          height: 'auto', backgroundColor: '#f4e0e0', margin: 0, padding: 12, flexDirection: 'column'
+        }}>
+          <h2 style={{ color: '#020d66' }
+          } > Social Media Tags and Classification</h2>
+          <ImpactTable topImpactfulData={topImpactfulData[0]} />
+          <PieChart pieChartData={pieChartData} />
+
         </Section>
       </Flex >
     </div >
