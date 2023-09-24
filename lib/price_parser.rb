@@ -128,22 +128,53 @@ class PriceParser
 	end
 
 	def self.add_tags
-		tags = JSON.parse("../data/twitter/tags.json")
-		tweets = JSON.parse("data/twitter/twitter.json")
+		tags = JSON.parse(File.read("../data/twitter/tags.json"))
+		tweets = JSON.parse(File.read("../data/twitter/twitter.json"))
 
 		tags.each do |tag|
 			id = tag[0]
-			twitter.each_with_index do |tw, i|
-				if tw["id"] = id
-					twitter[i]["tags"] = tag[1].strip.split(",")
+			tweets.each_with_index do |tw, i|
+				if  tw["id"] == id #||tw["id_str"] == id.to_s
+					tweets[i]["tags"] = tag[1].strip
 				end
 			end
 		end
 
-		binding.pry
+		# binding.pry
+
+		File.write("tagged.json", JSON.pretty_generate(tweets))
 
 		tags
 	end
+
+	def self.pie_chart
+		tags = ["Misc", "Partnerships", "In Person Events", "Hack/Exploits", "New Features", "Initial Hack/Exploit Announcement", "Tokenomics"]
+
+		tag_counts = {}
+
+		tweets = JSON.parse(File.read("tagged.json"))
+
+		tweets.each do |tw|
+			if tw["tags"]
+				tags.each do |tag|
+					tw_tags = tw["tags"]
+					if tw["tags"].downcase.include? tag.downcase
+						tag_counts[tag] ||= 0
+						tag_counts[tag] += 1
+					end
+				end
+			end
+		end
+
+		p tag_counts
+
+
+
+	end
+
+
+
+	# \n\nThe Technical News tag is news about protocol changes or changes in underlying tech stack or blockchain. The In Person Events tag is news about in-person events such as meetups, hackathons or conferences. The Partnerships tag is News about partnerships with other companies or protocols. The Initial Hack/Exploit Announcement tag is News announcing or aknowledging that a hack has taken place. The Hack/Exploits tag is news updating on a current exploit/hack situation. The Tokenomics tag is news about changes in a token's economics, such as revenue sharing plans, vesting schedules, community incentives. The New Features tag is news about major version updates and large updates to the product. Misc is anything that doesn't fit into the above tags. \n\nClassify the following text from Worldcoin's twitter account with one or more of above mentioned tags. In your response only include the tags.\nRT @10. @sama - Co-Founder of Worldcoin and @OpenAII CEO, discussed the growth in Asia and the power of AI\n\nhttps://t.co/UAV18E2f37 https://t.co/ZK569mlCei",
 
 	def self.gpt_prompts
 		messages = JSON.parse(File.read("../data/discord/tweets.json"))
@@ -180,4 +211,4 @@ Classify the following text from Worldcoin's twitter account with one or more of
 
 end
 
-PriceParser.fix_data
+PriceParser.pie_chart
