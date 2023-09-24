@@ -111,6 +111,96 @@ class PriceParser
 		File.write("twitter.json", messages.to_json)
 	end
 
+	def self.top_impactful
+		#content
+		#date
+		#change in eth
+		#change in usd
+
+		tweets = JSON.parse(File.read("../data/twitter/twitter.json"))
+
+		eligible = tweets.select {|t| t["impacts"]}
+
+		top = {}
+
+		top_ten_min = eligible.sort_by do |t| 
+			if t["impacts"][0]
+				t["impacts"][0]["eth"].abs
+			else
+				0
+			end
+		end.reverse[0..9].map do |t|
+			entry = {}
+			entry["content"] = t["rawContent"]
+			entry["date"] = t["date"]
+			entry["eth_delta"] = t["impacts"][0]["eth"]
+			entry["usd_delta"] = t["impacts"][0]["usd"]
+			entry
+		end
+
+		top_hour = eligible.sort_by do |t| 
+			if t["impacts"][1]
+				t["impacts"][1]["eth"].abs
+			else
+				0
+			end
+		end.reverse[0..9].map do |t|
+			entry = {}
+			entry["content"] = t["rawContent"]
+			entry["date"] = t["date"]
+			entry["eth_delta"] = t["impacts"][1]["eth"]
+			entry["usd_delta"] = t["impacts"][1]["usd"]
+			entry
+		end
+
+		top_day = eligible.sort_by do |t| 
+			if t["impacts"][2]
+				t["impacts"][2]["eth"].abs
+			else
+				0
+			end
+		end.reverse[0..9].map do |t|
+			entry = {}
+			entry["content"] = t["rawContent"]
+			entry["date"] = t["date"]
+			entry["eth_delta"] = t["impacts"][2]["eth"]
+			entry["usd_delta"] = t["impacts"][2]["usd"]
+			entry
+		end
+
+		top_week = eligible.sort_by do |t| 
+			if t["impacts"][3]
+				t["impacts"][3]["eth"].abs
+			else
+				0
+			end
+		end.reverse[0..9].map do |t|
+			entry = {}
+			entry["content"] = t["rawContent"]
+			entry["date"] = t["date"]
+			begin
+				entry["eth_delta"] = t["impacts"][4]["eth"]
+			rescue
+				entry["eth_delta"] = 0
+			end
+			begin
+				entry["usd_delta"] = t["impacts"][4]["eth"]
+			rescue
+				entry["usd_delta"] = 0
+			end
+			entry
+		end
+		
+
+
+		File.write("top_impactful.json", JSON.pretty_generate([top_ten_min: top_ten_min, top_hour: top_hour, top_day: top_day, top_week: top_week]))
+
+
+
+
+
+	end
+
 	def self.fix_data
 		prices = JSON.parse(File.read("../src/data/worldcoin_prices.json"))
 		last_eth_price = 0
@@ -211,4 +301,4 @@ Classify the following text from Worldcoin's twitter account with one or more of
 
 end
 
-PriceParser.pie_chart
+PriceParser.top_impactful
