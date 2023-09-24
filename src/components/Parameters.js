@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Card from './Card'
 import Flex from './Flex'
 
-import { ETH, BTC } from '../utils'
+import { ETH, USD } from '../utils'
 
 const Button = styled.button({
     backgroundColor: '#f2f2f2',
@@ -27,13 +27,12 @@ const Input = styled.input({
     fontWeight: 700
 },)
 
-
 const Parameters = ({
     currency,
     setCurrency }) => {
 
     const isEthSelected = currency === ETH
-    const isBtcSelected = currency === BTC
+    const isBtcSelected = currency === USD
 
     return <Card style={{
         backgroundColor: '#c994bc',
@@ -42,7 +41,7 @@ const Parameters = ({
         <Flex style={{ justifyContent: 'center' }}>
             <h4>Priced in:</h4>
             <Button isSelected={isEthSelected} onClick={() => setCurrency(ETH)}>{ETH}</Button>
-            <Button isSelected={isBtcSelected} onClick={() => setCurrency(BTC)}>{BTC}</Button>
+            <Button isSelected={isBtcSelected} onClick={() => setCurrency(USD)}>{USD}</Button>
         </Flex>
         <Flex style={{ justifyContent: 'center' }}>
             <h4>Choose Time Frame (Days)</h4>

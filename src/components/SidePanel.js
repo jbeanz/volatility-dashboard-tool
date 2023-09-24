@@ -54,7 +54,7 @@ const SidePanel = ({ setCoin, selectedCoinData }) => {
             <h2 style={{ color: '#020d66' }}>Analyze Token</h2>
             <Flex style={{ justifyContent: 'space-between' }}>
                 <Button onClick={() => setCoin(WORLD_COIN)}>{WORLD_COIN}</Button>
-                <Button onClick={() => setCoin(UNIBOT)}>{UNIBOT}</Button>
+                {/* <Button onClick={() => setCoin(UNIBOT)}>{UNIBOT}</Button> */}
             </Flex>
             <Flex style={{ alignItems: 'flex-start', width: '100%', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Flex>

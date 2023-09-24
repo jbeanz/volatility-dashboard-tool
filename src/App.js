@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import SidePanel from './components/SidePanel';
-import LineChart from './components/LineChart';
+import LineChart from './components/LineChart/LineChart';
 import ImpactTable from './components/ImpactTable';
 import FrontRunTable from './components/FrontRunTable';
 import PieChart from './components/PieChart';
@@ -15,6 +15,8 @@ import './App.css';
 
 import discordData from './data/discord.json';
 import coinData from './data/coinData.json'
+import { twitterData } from './data/twitter.js'
+import worldcoin_prices from './data/worldcoin_prices.json'
 
 const Section = styled.section({
   display: 'flex',
@@ -43,7 +45,7 @@ function App() {
               currency={currency}
               setCurrency={setCurrency}
             />
-            <LineChart selectedCoinDiscordData={selectedCoinDiscordData} />
+            <LineChart currency={currency} worldCoinPrice={worldcoin_prices} selectedCoinDiscordData={selectedCoinDiscordData} twitterData={twitterData} />
           </Flex>
         </Section>
         <Section style={{ backgroundColor: '#f4e0e0', margin: 0, padding: 12, flexDirection: 'column' }}>
