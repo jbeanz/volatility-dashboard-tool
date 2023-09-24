@@ -140,6 +140,7 @@ Classify the following text from Worldcoin's twitter account with one or more of
 		binding.pry
 
 		File.write("prompts.json", prompts.to_json)
+		File.write("ids.json", ids.to_json)
 
 	end
 
